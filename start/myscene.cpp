@@ -11,27 +11,34 @@
 
 MyScene::MyScene() : Scene()
 {
-	// start the timer.
-	t.start();
 
-	// create a single instance of MyEntity in the middle of the screen.
-	// the Sprite is added in Constructor of MyEntity.
-	myentity = new MyEntity();
-	myentity->position = Point2(SWIDTH/2, SHEIGHT/2);
-
-	// create the scene 'tree'
-	// add myentity to this Scene as a child.
-	this->addChild(myentity);
+	// create a grid
+	pathTile = std::vector<PathTile*>();
+	for (size_t y = 0; y < 17; y++)
+	{
+		for (size_t x = 0; x < 25; x++)
+		{
+			if(x % 4 == 0 || y % 4 == 0)
+			{
+				PathTile* e = new PathTile();
+				e->position.x = x * 32 + 32;
+				e->position.y = y * 32 + 32;
+				pathTile.push_back(e);
+				this->addChild(e);
+			}
+			
+		}
+	}
 }
 
 
 MyScene::~MyScene()
 {
 	// deconstruct and delete the Tree
-	this->removeChild(myentity);
+	//this->removeChild(e);
 
 	// delete myentity from the heap (there was a 'new' in the constructor)
-	delete myentity;
+	//delete e;
 }
 
 void MyScene::update(float deltaTime)
@@ -43,22 +50,4 @@ void MyScene::update(float deltaTime)
 		this->stop();
 	}
 
-	// ###############################################################
-	// Spacebar scales myentity
-	// ###############################################################
-	if (input()->getKeyDown(KeyCode::Space)) {
-		myentity->scale = Point(0.5f, 0.5f);
-	}
-	if (input()->getKeyUp(KeyCode::Space)) {
-		myentity->scale = Point(1.0f, 1.0f);
-	}
-
-	// ###############################################################
-	// Rotate color
-	// ###############################################################
-	if (t.seconds() > 0.0333f) {
-		RGBAColor color = myentity->sprite()->color;
-		myentity->sprite()->color = Color::rotate(color, 0.01f);
-		t.start();
-	}
 }
