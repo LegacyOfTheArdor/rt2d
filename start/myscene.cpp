@@ -29,20 +29,73 @@ MyScene::MyScene() : Scene()
 			
 		}
 	}
+
+	playerOne = new Player();
+	playerOne->sprite()->color = RED;
+	playerOne->position = Point2(256,128);
+
+	playerTwo = new Player();
+	playerTwo->sprite()->color = BLUE;
+	playerTwo->position = Point2(6400, 2176);
+	
+	this->addChild(playerOne);
+	this->addChild(playerTwo);
 }
 
 
 MyScene::~MyScene()
 {
 	// deconstruct and delete the Tree
-	//this->removeChild(e);
+	this->removeChild(playerOne);
+	this->removeChild(playerTwo);
+
 
 	// delete myentity from the heap (there was a 'new' in the constructor)
-	//delete e;
+	delete playerOne;
+	delete playerTwo;
 }
 
 void MyScene::update(float deltaTime)
 {
+	if(input()->getKeyDown(KeyCode::W)) 
+	{
+		playerOne->GoUp();
+	}
+
+	if(input()->getKeyDown(KeyCode::D)) 
+	{
+	 	playerOne->GoRight();
+	}
+
+	if(input()->getKeyDown(KeyCode::S)) 
+	{
+		playerOne->GoDown();
+	}
+
+	if(input()->getKeyDown(KeyCode::A)) 
+	{
+ 		playerOne->GoLeft();
+	}
+
+	if(input()->getKeyDown(KeyCode::Up)) 
+	{
+		playerTwo->GoUp();
+	}
+
+	if(input()->getKeyDown(KeyCode::Right)) 
+	{
+		playerTwo->GoRight();
+	}
+
+	if(input()->getKeyDown(KeyCode::Down)) 
+	{
+		playerTwo->GoDown();
+	}
+
+	if(input()->getKeyDown(KeyCode::Left)) 
+	{
+		playerTwo->GoLeft();
+	}
 	// ###############################################################
 	// Escape key stops the Scene
 	// ###############################################################

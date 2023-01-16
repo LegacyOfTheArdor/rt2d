@@ -31,6 +31,9 @@ public:
 private:
 	
 	std::vector<PathTile*> pathTile;
+
+	Player* playerOne;
+	Player* playerTwo;
 	
 };
 

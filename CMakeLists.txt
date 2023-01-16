@@ -160,6 +160,8 @@ IF(MAKE_START)
 		start/myscene.h
 		start/pathtile.cpp
 		start/pathtile.h
+		start/player.cpp
+		start/player.h
 	)
 	target_link_libraries(start
 		${ALL_GRAPHICS_LIBS}
