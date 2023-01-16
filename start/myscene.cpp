@@ -31,12 +31,13 @@ MyScene::MyScene() : Scene()
 	}
 
 	playerOne = new Player();
-	playerOne->sprite()->color = RED;
+	playerOne->sprite()->color = RGBAColor(0, 241, 255, 255);
 	playerOne->position = Point2(256,128);
 
 	playerTwo = new Player();
-	playerTwo->sprite()->color = BLUE;
-	playerTwo->position = Point2(6400, 2176);
+	playerTwo->sprite()->color = RGBAColor(255, 0, 255, 255);
+	playerTwo->position = Point2(1024, 640);
+	playerTwo->rotation.z = PI;
 	
 	this->addChild(playerOne);
 	this->addChild(playerTwo);
