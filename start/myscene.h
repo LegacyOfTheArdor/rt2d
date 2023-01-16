@@ -12,7 +12,9 @@
 #include <rt2d/scene.h>
 
 
-#include "pathtile.h"
+#include "pathtile.h" 
+#include "pointtile.h"
+#include "player.h"
 
 /// @brief The MyScene class is the Scene implementation.
 class MyScene : public Scene
