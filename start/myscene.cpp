@@ -20,16 +20,35 @@ MyScene::MyScene() : Scene()
 		{
 			if(x % 4 == 0 || y % 4 == 0)
 			{
-				PathTile* e = new PathTile();
-				e->position.x = x * 32 + 32;
-				e->position.y = y * 32 + 32;
-				pathTile.push_back(e);
+				PathTile* path = new PathTile();
+				path->position.x = x * 32 + 256;
+				path->position.y = y * 32 + 128;
+				pathTile.push_back(path);
+				this->addChild(path);
+			}
+			
+		}
+	}
+	
+	// create a second grid
+	pointTile = std::vector<PointTile*>();
+	for (size_t y = 0; y < 4; y++)
+	{
+		for (size_t x = 0; x < 6; x++)
+		{
+			
+			{
+				PointTile* e = new PointTile();
+				e->position.x = x * 128 + 320;
+				e->position.y = y * 128 + 192;
+				pointTile.push_back(e);
 				this->addChild(e);
 			}
 			
 		}
 	}
 
+	// create two players
 	playerOne = new Player();
 	playerOne->sprite()->color = RGBAColor(0, 241, 255, 255);
 	playerOne->position = Point2(256,128);
@@ -58,50 +77,146 @@ MyScene::~MyScene()
 
 void MyScene::update(float deltaTime)
 {
+	static int playerTileIndex = 0;
+
+	// player is on top of which pathTile????
+	for(int i = 0; i < pathTile.size(); i++)
+	{
+		// std::cout << "counted a pathtile";
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, pathTile[i]->position.x, pathTile[i]->position.y);
+		 if (collide)
+		 {
+			 pathTile[i]->sprite()->color = RGBAColor(0, 241, 255, 255);
+			 playerTileIndex = i;
+		 }
+		 else {
+			 // position is last tile
+			 playerOne->position = Point(pathTile[playerTileIndex]->position.x, pathTile[playerTileIndex]->position.y);
+		 }
+
+		 bool collideP2 = circle2circleFloats(playerTwo->position.x, playerTwo->position.y, pathTile[i]->position.x, pathTile[i]->position.y);
+		 if (collideP2)
+		 {
+			 pathTile[i]->sprite()->color = RGBAColor(255, 0, 255, 255);
+		 }
+	}
+
+
+	// player one and two movement
 	if(input()->getKeyDown(KeyCode::W)) 
 	{
 		playerOne->GoUp();
+		
+		//player on player collision
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, playerTwo->position.x, playerTwo->position.y );
+		if (collide) 
+		{
+			playerOne->position.y = playerOne->position.y + 32;
+		}
+		
+		/*bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, path->position.x, path->position.y );
+		if (!collide) 
+		{
+			playerOne->position.y = playerOne->position.y + 32;
+		}*/
 	}
 
 	if(input()->getKeyDown(KeyCode::D)) 
 	{
 	 	playerOne->GoRight();
+
+		//player on player collision
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, playerTwo->position.x, playerTwo->position.y );
+		if (collide) 
+		{
+			playerOne->position.x = playerOne->position.x - 32;
+		}
 	}
 
 	if(input()->getKeyDown(KeyCode::S)) 
 	{
 		playerOne->GoDown();
+
+		//player on player collision
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, playerTwo->position.x, playerTwo->position.y );
+		if (collide) 
+		{
+			playerOne->position.y = playerOne->position.y - 32;
+		}
 	}
 
 	if(input()->getKeyDown(KeyCode::A)) 
 	{
  		playerOne->GoLeft();
+
+		//player on player collision
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, playerTwo->position.x, playerTwo->position.y );
+		if (collide) 
+		{
+			playerOne->position.x = playerOne->position.x + 32;
+		}
 	}
 
 	if(input()->getKeyDown(KeyCode::Up)) 
 	{
 		playerTwo->GoUp();
+
+		//player on player collision
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, playerTwo->position.x, playerTwo->position.y );
+		if (collide) 
+		{
+			playerTwo->position.y = playerTwo->position.y + 32;
+		}
 	}
 
 	if(input()->getKeyDown(KeyCode::Right)) 
 	{
 		playerTwo->GoRight();
+
+		//player on player collision
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, playerTwo->position.x, playerTwo->position.y );
+		if (collide) 
+		{
+			playerTwo->position.x = playerTwo->position.x - 32;
+		}
 	}
 
 	if(input()->getKeyDown(KeyCode::Down)) 
 	{
 		playerTwo->GoDown();
+
+		//player on player collision
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, playerTwo->position.x, playerTwo->position.y );
+		if (collide) 
+		{
+			playerTwo->position.y = playerTwo->position.y - 32;
+		}
 	}
 
 	if(input()->getKeyDown(KeyCode::Left)) 
 	{
 		playerTwo->GoLeft();
+
+		//player on player collision
+		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, playerTwo->position.x, playerTwo->position.y );
+		if (collide) 
+		{
+			playerTwo->position.x = playerTwo->position.x + 32;
+		}
 	}
+
 	// ###############################################################
 	// Escape key stops the Scene
 	// ###############################################################
-	if (input()->getKeyUp(KeyCode::Escape)) {
+	if (input()->getKeyUp(KeyCode::Escape))
+	{
 		this->stop();
 	}
+
+	/*bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, path->position.x, path->position.y);
+	if (collide)
+	{
+		path->sprite()->color = RGBAColor(0, 241, 255, 255);
+	}*/
 
 }
