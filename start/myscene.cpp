@@ -78,27 +78,39 @@ MyScene::~MyScene()
 void MyScene::update(float deltaTime)
 {
 	static int playerTileIndex = 0;
+	static int player2TileIndex = 0;
 
 	// player is on top of which pathTile????
-	for(int i = 0; i < pathTile.size(); i++)
+		for(int i = 0; i < pathTile.size(); i++)
 	{
-		// std::cout << "counted a pathtile";
-		bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, pathTile[i]->position.x, pathTile[i]->position.y);
-		 if (collide)
-		 {
-			 pathTile[i]->sprite()->color = RGBAColor(0, 241, 255, 255);
-			 playerTileIndex = i;
-		 }
-		 else {
-			 // position is last tile
-			 playerOne->position = Point(pathTile[playerTileIndex]->position.x, pathTile[playerTileIndex]->position.y);
-		 }
+			bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, pathTile[i]->position.x, pathTile[i]->position.y);
+		 	if (collide)
+		 	{
+				pathTile[i]->sprite()->color = RGBAColor(0, 241, 255, 255);
+				playerTileIndex = i;
+		 	}
 
-		 bool collideP2 = circle2circleFloats(playerTwo->position.x, playerTwo->position.y, pathTile[i]->position.x, pathTile[i]->position.y);
-		 if (collideP2)
-		 {
-			 pathTile[i]->sprite()->color = RGBAColor(255, 0, 255, 255);
-		 }
+		 	bool collideP2 = circle2circleFloats(playerTwo->position.x, playerTwo->position.y, pathTile[i]->position.x, pathTile[i]->position.y);
+		 	if (collideP2)
+		 	{
+				pathTile[i]->sprite()->color = RGBAColor(255, 0, 255, 255);
+				player2TileIndex = i;
+		 	}
+	}
+
+	for (int o = 0; o < pointTile.size(); o++)
+	{
+		bool collidePoint = circle2circleFloats(playerOne->position.x, playerOne->position.y, pointTile[o]->position.x, pointTile[o]->position.y, 64);
+		if (collidePoint)
+		{
+			playerOne->position = Point(pathTile[playerTileIndex]->position.x, pathTile[playerTileIndex]->position.y);
+		}
+
+		bool collidePointp2 = circle2circleFloats(playerTwo->position.x, playerTwo->position.y, pointTile[o]->position.x, pointTile[o]->position.y, 64);
+		if (collidePointp2)
+		{
+			playerTwo->position = Point(pathTile[player2TileIndex]->position.x, pathTile[player2TileIndex]->position.y);
+		}
 	}
 
 
