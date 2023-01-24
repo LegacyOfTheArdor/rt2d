@@ -13,7 +13,7 @@ MyScene::MyScene() : Scene()
 {
 
 	// create a grid
-	pathTile = std::vector<PathTile*>();
+	pathTiles = std::vector<PathTile*>();
 	for (size_t y = 0; y < 17; y++)
 	{
 		for (size_t x = 0; x < 25; x++)
@@ -23,7 +23,7 @@ MyScene::MyScene() : Scene()
 				PathTile* path = new PathTile();
 				path->position.x = x * 32 + 256;
 				path->position.y = y * 32 + 128;
-				pathTile.push_back(path);
+				pathTiles.push_back(path);
 				this->addChild(path);
 			}
 			
@@ -31,7 +31,7 @@ MyScene::MyScene() : Scene()
 	}
 	
 	// create a second grid
-	pointTile = std::vector<PointTile*>();
+	pointTiles = std::vector<PointTile*>();
 	for (size_t y = 0; y < 4; y++)
 	{
 		for (size_t x = 0; x < 6; x++)
@@ -41,10 +41,25 @@ MyScene::MyScene() : Scene()
 				PointTile* e = new PointTile();
 				e->position.x = x * 128 + 320;
 				e->position.y = y * 128 + 192;
-				pointTile.push_back(e);
+				pointTiles.push_back(e);
 				this->addChild(e);
 			}
 			
+		}
+	}
+
+	//make a list for point tile neigbours 	
+	for(int i = 0; i < pointTiles.size(); i++)
+	{
+		for(int j = 0; j < pathTiles.size(); j++)
+		{
+			Point point = pointTiles[i]->position;
+			Point path =  pathTiles[j]->position;
+			Vector2 diff = point - path;
+			float distance = diff.getLength();
+			if (distance < 90) {
+				pointTiles[i]->addNeighbour(pathTiles[j]);
+			}
 		}
 	}
 
@@ -81,35 +96,35 @@ void MyScene::update(float deltaTime)
 	static int player2TileIndex = 0;
 
 	// player is on top of which pathTile????
-		for(int i = 0; i < pathTile.size(); i++)
+	for(int i = 0; i < pathTiles.size(); i++)
 	{
-			bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, pathTile[i]->position.x, pathTile[i]->position.y);
+			bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, pathTiles[i]->position.x, pathTiles[i]->position.y);
 		 	if (collide)
 		 	{
-				pathTile[i]->sprite()->color = RGBAColor(0, 241, 255, 255);
+				pathTiles[i]->sprite()->color = RGBAColor(0, 241, 255, 255);
 				playerTileIndex = i;
 		 	}
 
-		 	bool collideP2 = circle2circleFloats(playerTwo->position.x, playerTwo->position.y, pathTile[i]->position.x, pathTile[i]->position.y);
+		 	bool collideP2 = circle2circleFloats(playerTwo->position.x, playerTwo->position.y, pathTiles[i]->position.x, pathTiles[i]->position.y);
 		 	if (collideP2)
 		 	{
-				pathTile[i]->sprite()->color = RGBAColor(255, 0, 255, 255);
+				pathTiles[i]->sprite()->color = RGBAColor(255, 0, 255, 255);
 				player2TileIndex = i;
 		 	}
 	}
 
-	for (int o = 0; o < pointTile.size(); o++)
+	for (int i = 0; i < pointTiles.size(); i++)
 	{
-		bool collidePoint = circle2circleFloats(playerOne->position.x, playerOne->position.y, pointTile[o]->position.x, pointTile[o]->position.y, 64);
+		bool collidePoint = circle2circleFloats(playerOne->position.x, playerOne->position.y, pointTiles[i]->position.x, pointTiles[i]->position.y, 64);
 		if (collidePoint)
 		{
-			playerOne->position = Point(pathTile[playerTileIndex]->position.x, pathTile[playerTileIndex]->position.y);
+			playerOne->position = Point(pathTiles[playerTileIndex]->position.x, pathTiles[playerTileIndex]->position.y);
 		}
 
-		bool collidePointp2 = circle2circleFloats(playerTwo->position.x, playerTwo->position.y, pointTile[o]->position.x, pointTile[o]->position.y, 64);
+		bool collidePointp2 = circle2circleFloats(playerTwo->position.x, playerTwo->position.y, pointTiles[i]->position.x, pointTiles[i]->position.y, 64);
 		if (collidePointp2)
 		{
-			playerTwo->position = Point(pathTile[player2TileIndex]->position.x, pathTile[player2TileIndex]->position.y);
+			playerTwo->position = Point(pathTiles[player2TileIndex]->position.x, pathTiles[player2TileIndex]->position.y);
 		}
 	}
 
@@ -126,11 +141,6 @@ void MyScene::update(float deltaTime)
 			playerOne->position.y = playerOne->position.y + 32;
 		}
 		
-		/*bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, path->position.x, path->position.y );
-		if (!collide) 
-		{
-			playerOne->position.y = playerOne->position.y + 32;
-		}*/
 	}
 
 	if(input()->getKeyDown(KeyCode::D)) 
@@ -225,10 +235,5 @@ void MyScene::update(float deltaTime)
 		this->stop();
 	}
 
-	/*bool collide = circle2circleFloats(playerOne->position.x, playerOne->position.y, path->position.x, path->position.y);
-	if (collide)
-	{
-		path->sprite()->color = RGBAColor(0, 241, 255, 255);
-	}*/
 
 }
