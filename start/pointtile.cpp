@@ -21,10 +21,16 @@ PointTile::~PointTile()
 
 void PointTile::update(float deltaTime)
 {
-     bool owned = checkNeighbours();
-     if (owned) {
-        // this->sprite()->color = RGBAColor(255, 0, 0, 255);
+      bool owned = checkNeighbours();
+     if (owned)
+    {
+        //change color to the player who owns it
         this->sprite()->color = neighbours[0]->sprite()->color;
+     }
+     else
+     {
+        //back to white
+        this->sprite()->color = WHITE;
      }
 }
 
