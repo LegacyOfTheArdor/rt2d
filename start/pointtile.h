@@ -21,6 +21,7 @@ private:
     std::vector<PathTile*> neighbours;
 
     bool checkNeighbours();
+   
 
 };
 

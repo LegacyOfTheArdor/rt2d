@@ -19,9 +19,10 @@ PointTile::~PointTile()
 
 }
 
+
 void PointTile::update(float deltaTime)
 {
-      bool owned = checkNeighbours();
+     bool owned = checkNeighbours();
      if (owned)
     {
         //change color to the player who owns it
@@ -43,6 +44,7 @@ void PointTile::update(float deltaTime)
         if (realColor != checkColor) {
             // nope
             return false;
+            
         }
      }
      // all colours are the same so far

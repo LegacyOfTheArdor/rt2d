@@ -5,8 +5,9 @@
 Player::Player() : Entity()
 {
     this->addSprite("assets/player.tga");
-    this->sprite()->color = WHITE;
+    
 }
+
 
 void Player::GoUp()
 {
@@ -42,5 +43,23 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
+    if(this->position.y > 640)
+    {
+        this->position.y = this->position.y - 32;
+    }
 
+    if(this->position.y < 128)
+    {
+        this->position.y = this->position.y + 32;
+    }
+
+    if(this->position.x > 1024)
+    {
+        this->position.x = this->position.x - 32;
+    } 
+
+    if(this->position.x < 256)
+    {
+        this->position.x = this->position.x + 32;
+    }
 }
